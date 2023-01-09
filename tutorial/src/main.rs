@@ -14,5 +14,6 @@ fn main() {
 }
 
 fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
+    let _ = engine.add_sprite("player_1", SpritePreset::RacingCarBlue);
     println!("Logical...")
 }
