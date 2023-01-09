@@ -20,10 +20,12 @@ fn main() {
 }
 
 fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
-    let blue_car = engine.add_sprite("player_1", SpritePreset::RacingCarBlue);
+    let _ = engine.add_sprite("player_1", SpritePreset::RacingCarBlue);
+    let blue_car = engine.sprites.get_mut("player_1").unwrap();
     blue_car.translation = Vec2::new(-150.0, -200.0);
     blue_car.rotation = UP;
     blue_car.scale = 1.3;
     blue_car.layer = CHARACTER_LAYER;
+    // engine.sprites.remove("player_1");
     println!("Logical...")
 }
