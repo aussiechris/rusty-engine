@@ -9,6 +9,8 @@ const EFFECTS_LAYER: f32 = 2.0;
 const UI_BOTTOM_LAYER: f32 = 3.0;
 const UI_TOP_LAYER: f32 = 4.0;
 
+const MOVE_SPEED: f32 = 20.0;
+
 struct GameState {
     health_left: i32,
     red_car_rotation: f32,
@@ -39,7 +41,10 @@ fn main() {
 
 fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     let _ = engine.add_sprite("player_1", SpritePreset::RacingCarBlue);
+
+    // add blue car
     let blue_car = engine.sprites.get_mut("player_1").unwrap();
+
     if game_state.blue_car_timer.tick(engine.delta).just_finished() {
         // place the blue car at a random position on screen
         game_state.blue_car_translation = Vec2::new(
@@ -54,15 +59,27 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     blue_car.rotation = game_state.blue_car_rotation;
     blue_car.layer = CHARACTER_LAYER;
     blue_car.collision = true;
-    // engine.sprites.remove("player_1"); // delete sprite - will make it invisible if you uncomment
+
+    // add red car
+    if engine.keyboard_state.pressed(KeyCode::Right) {
+        game_state.red_car_rotation = RIGHT;
+    } else if engine.keyboard_state.pressed(KeyCode::Left) {
+        game_state.red_car_rotation = LEFT;
+    } else if engine.keyboard_state.pressed(KeyCode::Up) {
+        game_state.red_car_rotation = UP;
+    } else if engine.keyboard_state.pressed(KeyCode::Down) {
+        game_state.red_car_rotation = DOWN;
+    }
 
     let red_car = engine.add_sprite("player_2", SpritePreset::RacingCarRed);
+
     red_car.translation = game_state.red_car_translation;
     red_car.rotation = game_state.red_car_rotation;
     red_car.scale = game_state.red_car_scale;
     red_car.layer = CHARACTER_LAYER;
     red_car.collision = true;
 
+    // check for and manage collisions
     for event in engine.collision_events.drain(..) {
         match event.state {
             CollisionState::Begin => {
