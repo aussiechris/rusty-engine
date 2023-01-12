@@ -66,21 +66,25 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         .pressed_any(&[KeyCode::Right, KeyCode::D])
     {
         game_state.red_car_rotation = RIGHT;
+        game_state.red_car_translation.x += MOVE_SPEED;
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Left, KeyCode::A])
     {
         game_state.red_car_rotation = LEFT;
+        game_state.red_car_translation.x -= MOVE_SPEED;
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Up, KeyCode::W])
     {
         game_state.red_car_rotation = UP;
+        game_state.red_car_translation.y += MOVE_SPEED;
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Down, KeyCode::S])
     {
         game_state.red_car_rotation = DOWN;
+        game_state.red_car_translation.y -= MOVE_SPEED;
     }
 
     let red_car = engine.add_sprite("player_2", SpritePreset::RacingCarRed);
