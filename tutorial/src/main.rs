@@ -44,12 +44,13 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
 
     // add blue car
     let blue_car = engine.sprites.get_mut("player_1").unwrap();
-
+    let window_width = engine.window_dimensions.x / 2.0;
+    let window_height = engine.window_dimensions.y / 2.0;
     if game_state.blue_car_timer.tick(engine.delta).just_finished() {
         // place the blue car at a random position on screen
         game_state.blue_car_translation = Vec2::new(
-            random::<f32>() * engine.window_dimensions.x - engine.window_dimensions.x / 2.0,
-            random::<f32>() * engine.window_dimensions.y - engine.window_dimensions.y / 2.0,
+            random::<f32>() * engine.window_dimensions.x - window_width,
+            random::<f32>() * engine.window_dimensions.y - window_height,
         );
         game_state.blue_car_scale = random::<f32>() * 3.5;
     }
@@ -66,25 +67,33 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         .pressed_any(&[KeyCode::Right, KeyCode::D])
     {
         game_state.red_car_rotation = RIGHT;
-        game_state.red_car_translation.x += MOVE_SPEED;
+        if game_state.red_car_translation.x < window_width {
+            game_state.red_car_translation.x += MOVE_SPEED;
+        }
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Left, KeyCode::A])
     {
         game_state.red_car_rotation = LEFT;
-        game_state.red_car_translation.x -= MOVE_SPEED;
+        if game_state.red_car_translation.x + window_width > 0.0 {
+            game_state.red_car_translation.x -= MOVE_SPEED;
+        }
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Up, KeyCode::W])
     {
         game_state.red_car_rotation = UP;
-        game_state.red_car_translation.y += MOVE_SPEED;
+        if game_state.red_car_translation.y < window_height {
+            game_state.red_car_translation.y += MOVE_SPEED;
+        }
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Down, KeyCode::S])
     {
         game_state.red_car_rotation = DOWN;
-        game_state.red_car_translation.y -= MOVE_SPEED;
+        if game_state.red_car_translation.y + window_height > 0.0 {
+            game_state.red_car_translation.y -= MOVE_SPEED;
+        }
     }
 
     let red_car = engine.add_sprite("player_2", SpritePreset::RacingCarRed);
