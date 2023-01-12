@@ -60,14 +60,26 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     blue_car.layer = CHARACTER_LAYER;
     blue_car.collision = true;
 
-    // add red car
-    if engine.keyboard_state.pressed(KeyCode::Right) {
+    // add red car {
+    if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Right, KeyCode::D])
+    {
         game_state.red_car_rotation = RIGHT;
-    } else if engine.keyboard_state.pressed(KeyCode::Left) {
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Left, KeyCode::A])
+    {
         game_state.red_car_rotation = LEFT;
-    } else if engine.keyboard_state.pressed(KeyCode::Up) {
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Up, KeyCode::W])
+    {
         game_state.red_car_rotation = UP;
-    } else if engine.keyboard_state.pressed(KeyCode::Down) {
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Down, KeyCode::S])
+    {
         game_state.red_car_rotation = DOWN;
     }
 
